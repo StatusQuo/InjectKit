@@ -117,7 +117,7 @@ public final class AnyServiceFactory: Resolver {
 
 
 @_functionBuilder
-struct ContainerBuilder {
+public struct ContainerBuilder {
 
     typealias Component = [AnyServiceFactory]
 
