@@ -114,8 +114,6 @@ public final class AnyServiceFactory: Resolver {
     }
 }
 
-
-
 @_functionBuilder
 public struct ContainerBuilder {
 
@@ -123,7 +121,7 @@ public struct ContainerBuilder {
 
     typealias Expression = AnyServiceFactory
 
-    static func buildBlock(_ children: Component...) -> Component {
+    public static func buildBlock(_ children: Component...) -> Component {
         return children.flatMap { $0 }
     }
 
