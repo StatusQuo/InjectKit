@@ -1,7 +1,7 @@
 
 fileprivate var globalContainer: Container?
 
-protocol Resolver {
+public protocol Resolver {
     func resolve<ServiceType>(_ type: ServiceType.Type) -> ServiceType
 }
 
@@ -87,8 +87,8 @@ class BasicServiceSingleton<ServiceType>: ServiceFactory {
     }
 }
 
-final class AnyServiceFactory: Resolver {
-    func resolve<ServiceType>(_ type: ServiceType.Type) -> ServiceType {
+public final class AnyServiceFactory: Resolver {
+    public func resolve<ServiceType>(_ type: ServiceType.Type) -> ServiceType {
         assert(_supports(type))
 
         return _resolve(self) as! ServiceType
@@ -140,8 +140,7 @@ public func single<ServiceType>(_ type: ServiceType.Type, _ factory: @escaping (
 }
 
 public func factory<ServiceType>(_ type: ServiceType.Type, _ factory: @escaping (Resolver) -> ServiceType) -> [AnyServiceFactory] {
-    let newFactory = BasicServiceFactory<ServiceType>(type, factory: { resolver inhttps://github.com/StatusQuo/InjectKit.git
-        factory(resolver)
+    let newFactory = BasicServiceFactory<ServiceType>(type, factory: { resolver in        factory(resolver)
     })
     return [AnyServiceFactory(newFactory)]
 }
@@ -155,7 +154,10 @@ public func start(@ContainerBuilder makeFactories: () -> [AnyServiceFactory]) {
 @propertyWrapper
 public class Inject<ServiceType> {
     var service: ServiceType?
-    var wrappedValue: ServiceType {
+    public init() {
+        
+    }
+    public var wrappedValue: ServiceType {
         get {
             if let service = service {
                 return service
