@@ -117,7 +117,7 @@ public final class AnyServiceFactory: Resolver {
 @_functionBuilder
 public struct ContainerBuilder {
 
-    typealias Component = [AnyServiceFactory]
+    public typealias Component = [AnyServiceFactory]
 
     typealias Expression = AnyServiceFactory
 
@@ -130,14 +130,30 @@ public struct ContainerBuilder {
     }
 }
 
-public func single<ServiceType>(_ type: ServiceType.Type, _ factory: @autoclosure @escaping (Resolver) -> ServiceType) -> [AnyServiceFactory] {
+
+public func single<ServiceType>(_ type: ServiceType.Type, _ factory: @autoclosure @escaping () -> ServiceType) -> [AnyServiceFactory] {
+    let newFactory = BasicServiceSingleton<ServiceType>(type, factory: { _ in
+        factory()
+    })
+    return [AnyServiceFactory(newFactory)]
+}
+
+public func factory<ServiceType>(_ type: ServiceType.Type, _ factory: @autoclosure @escaping () -> ServiceType) -> [AnyServiceFactory] {
+    let newFactory = BasicServiceFactory<ServiceType>(type, factory: { _ in
+        factory()
+    })
+    return [AnyServiceFactory(newFactory)]
+}
+
+
+public func single<ServiceType>(_ type: ServiceType.Type, _ factory:  @escaping (Resolver) -> ServiceType) -> [AnyServiceFactory] {
     let newFactory = BasicServiceSingleton<ServiceType>(type, factory: { resolver in
         factory(resolver)
     })
     return [AnyServiceFactory(newFactory)]
 }
 
-public func factory<ServiceType>(_ type: ServiceType.Type, _ factory: @autoclosure @escaping (Resolver) -> ServiceType) -> [AnyServiceFactory] {
+public func factory<ServiceType>(_ type: ServiceType.Type, _ factory:  @escaping (Resolver) -> ServiceType) -> [AnyServiceFactory] {
     let newFactory = BasicServiceFactory<ServiceType>(type, factory: { resolver in        factory(resolver)
     })
     return [AnyServiceFactory(newFactory)]
