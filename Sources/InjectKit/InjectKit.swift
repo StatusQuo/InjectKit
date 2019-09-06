@@ -132,28 +132,28 @@ struct ContainerBuilder {
     }
 }
 
-func single<ServiceType>(_ type: ServiceType.Type, _ factory: @escaping (Resolver) -> ServiceType) -> [AnyServiceFactory] {
+public func single<ServiceType>(_ type: ServiceType.Type, _ factory: @escaping (Resolver) -> ServiceType) -> [AnyServiceFactory] {
     let newFactory = BasicServiceSingleton<ServiceType>(type, factory: { resolver in
         factory(resolver)
     })
     return [AnyServiceFactory(newFactory)]
 }
 
-func factory<ServiceType>(_ type: ServiceType.Type, _ factory: @escaping (Resolver) -> ServiceType) -> [AnyServiceFactory] {
-    let newFactory = BasicServiceFactory<ServiceType>(type, factory: { resolver in
+public func factory<ServiceType>(_ type: ServiceType.Type, _ factory: @escaping (Resolver) -> ServiceType) -> [AnyServiceFactory] {
+    let newFactory = BasicServiceFactory<ServiceType>(type, factory: { resolver inhttps://github.com/StatusQuo/InjectKit.git
         factory(resolver)
     })
     return [AnyServiceFactory(newFactory)]
 }
 
 
-func start(@ContainerBuilder makeFactories: () -> [AnyServiceFactory]) {
+public func start(@ContainerBuilder makeFactories: () -> [AnyServiceFactory]) {
     globalContainer = Container().register(makeFactories())
 }
 
 
 @propertyWrapper
-class Inject<ServiceType> {
+public class Inject<ServiceType> {
     var service: ServiceType?
     var wrappedValue: ServiceType {
         get {
