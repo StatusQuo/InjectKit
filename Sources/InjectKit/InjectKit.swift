@@ -132,14 +132,14 @@ struct ContainerBuilder {
     }
 }
 
-public func single<ServiceType>(_ type: ServiceType.Type, _ factory: @escaping (Resolver) -> ServiceType) -> [AnyServiceFactory] {
+public func single<ServiceType>(_ type: ServiceType.Type, _ factory: @autoclosure @escaping (Resolver) -> ServiceType) -> [AnyServiceFactory] {
     let newFactory = BasicServiceSingleton<ServiceType>(type, factory: { resolver in
         factory(resolver)
     })
     return [AnyServiceFactory(newFactory)]
 }
 
-public func factory<ServiceType>(_ type: ServiceType.Type, _ factory: @escaping (Resolver) -> ServiceType) -> [AnyServiceFactory] {
+public func factory<ServiceType>(_ type: ServiceType.Type, _ factory: @autoclosure @escaping (Resolver) -> ServiceType) -> [AnyServiceFactory] {
     let newFactory = BasicServiceFactory<ServiceType>(type, factory: { resolver in        factory(resolver)
     })
     return [AnyServiceFactory(newFactory)]
@@ -155,7 +155,7 @@ public func start(@ContainerBuilder makeFactories: () -> [AnyServiceFactory]) {
 public class Inject<ServiceType> {
     var service: ServiceType?
     public init() {
-        
+
     }
     public var wrappedValue: ServiceType {
         get {
